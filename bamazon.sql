@@ -5,7 +5,7 @@ USE bamazon; -- Subsequent commands will be applied to the selected database
 
 -- Creating the PRODUCTS table and defining column names, data types and lengths
 CREATE TABLE products(
-item_id INT NOT NULL AUTO_INCREMENT,
+item_id INT AUTO_INCREMENT NOT NULL,
 product_name VARCHAR(50) NOT NULL,
 department_name VARCHAR(50) NOT NULL,
 price DECIMAL(10,2) NOT NULL,

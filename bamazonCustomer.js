@@ -22,7 +22,7 @@ connection.connect(function(err) {
 
 console.log("Welcome to Bamazon!");
 
-// Run a Select all query against the database and prettify the results
+// Run a Select all query against the products table and prettify the results
 function listProducts(){
     connection.query(
         "SELECT * FROM products",
@@ -30,14 +30,15 @@ function listProducts(){
             if (err) throw err;
             for (var i = 0; i < results.length; i++){
                 console.log(
-                    "Item Id: " + results[i].item_id +
+                    " Item Id: " + results[i].item_id +
                     " || Product Name: " + results[i].product_name +
                     " || Department: " + results[i].department_name +
                     " || Price($): " + results[i].price
                 );
             }
             console.log("---------------------------------------------");
-            promptUser(); // Once inventory is displayed, invoke the inquirer prompt
+            // Once inventory is displayed, invoke the inquirer prompt
+            promptUser();
         });
 }
 
@@ -48,10 +49,10 @@ function promptUser(){
             type: 'input',
             message: 'Enter the ID of the item you\'d like to purchase: ',
             validate: function(value){
-                if(isNaN(value) === false){
+                if(Math.sign(value) === 1 && Number.isInteger(parseFloat(value)) === true){
                     return true;
                 } else {
-                    return false;
+                    return "Invalid input. Please try again";
                 }
             }
         },
@@ -60,10 +61,10 @@ function promptUser(){
             type: 'input',
             message: 'Enter the number of units you\'d like to purchase: ',
             validate: function(value){
-                if(isNaN(value) ===  false){
+                if(Math.sign(value) === 1 && Number.isInteger(parseFloat(value)) === true){
                     return true;
                 } else {
-                    return false;
+                    return "Invalid input. Please try again";
                 }
             }
         }
@@ -77,7 +78,7 @@ function promptUser(){
             function(err, results){
                 if (err) throw err;
                 if(results.length > 0){ // If the user selected a valid ID and a response was received from the database
-                    var product = results[0]; // Since IDs are unique per product, select the first item in the result array 
+                    var product = results[0]; // Since IDs are unique per product, select the first item in the results array 
                     if (answer.quantity <= product.stock_quantity){ // If there's enough in stock to process user's order
                         console.log("Processing your order...");
                         connection.query(
